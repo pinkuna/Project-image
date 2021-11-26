@@ -19,7 +19,7 @@ model_keras = keras.models.load_model(model_save_at)
 # model.load(model_save_at)
 labels=list(np.load('labels.npy'))
 
-test_data='1234.jpg'
+test_data='orenge.jpg'
 img=cv2.imread(test_data)
 
 img1=cv2.resize(img,(IMG_SIZE,IMG_SIZE))
@@ -32,7 +32,6 @@ name=labels[result]
 d = 1024 / img.shape[1]
 dim = (1024, int(img.shape[0] * d))
 img = cv2.resize(img, dim, interpolation=cv2.INTER_AREA) #cv2(w, h)
-print(img.shape)
 cal=round(calories(result+1,img),2)
 
 import matplotlib.pyplot as plt

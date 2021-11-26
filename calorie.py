@@ -23,14 +23,14 @@ def getVolume(label, area, skin_area, pix_to_cm_multiplier, fruit_contour):
 	if  label == 1 or label == 4 or label == 5 or label == 6 or label == 7 or label == 8: #sphere-apple,tomato,orange,kiwi,onion
 		radius = 3.75#np.sqrt(area_fruit/np.pi)
 		volume = (4/3)*np.pi*radius*radius*radius
-		print (area_fruit, radius, volume, skin_area)
+		# print (area_fruit, radius, volume, skin_area)
 	
 	if label == 2 or (label == 3 and area_fruit > 30): #cylinder like banana, cucumber, carrot
             fruit_rect = cv2.minAreaRect(fruit_contour)
             height = max(fruit_rect[1])*pix_to_cm_multiplier
             radius = area_fruit/(2.0*height)
             volume = np.pi*radius*radius*height
-            print(height, radius)
+            # print(height, radius)
 	
 	return volume
 
@@ -64,7 +64,6 @@ def detect_coin(image):
         circles = np.round(circles[0, :]).astype("int")
 
         x, y, d = (circles[0])
-        print(d)
         roi = image[y - d:y + d, x - d:x + d]
         if False:
             m = np.zeros(roi.shape[:2], dtype="uint8")
@@ -88,11 +87,11 @@ def detect_coin(image):
 def calories(result,img):
     img_path =img 
 
-    fruit_areas,final_f,areaod, fruit_contours = getAreaOfFood(img_path)
+    fruit_areas,final_f,areaod, fruit_contours = getAreaOfFood(img_path,result)
     radius = detect_coin(img_path)
     skin_areas = np.pi*radius*radius
     pix_cm = (1.3/radius)
-    print(radius, pix_cm, skin_areas)
+    print('\nradius',radius,'\npix to cm', pix_cm,'\nskin_areas', skin_areas)
     volume = getVolume(result, fruit_areas, skin_areas, pix_cm, fruit_contours)
     mass, cal, cal_100 = getCalorie(result, volume)
     fruit_volumes=volume

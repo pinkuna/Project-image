@@ -5,13 +5,13 @@ coin_detector-master/
 test.zip
 __pycache__/
 *.npy
-*.jpg
-*.jpeg
-*.PNG
-*.png
-*.jfif
+# *.jpg
+# *.jpeg
+# *.PNG
+#*.png
+#*.jfif
 model/
-ขยะ/
+hide/
 log/
 model.zip
 .gitignore/

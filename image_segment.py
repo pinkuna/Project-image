@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 
-def getAreaOfFood(img1):
+def getAreaOfFood(img1,result):
     data=os.path.join(os.getcwd(),"images")
     if os.path.exists(data):
         print('folder exist for images at ',data)
@@ -23,7 +23,10 @@ def getAreaOfFood(img1):
     mask = np.zeros(img.shape, np.uint8)
     largest_areas = sorted(contours, key=cv2.contourArea)
 
-    cv2.drawContours(mask, [largest_areas[-1]], 0, (255,255,255,255), -1)
+    if result == 2:
+        cv2.drawContours(mask, [largest_areas[-2]], 0, (255,255,255,255), -1)
+    else:
+        cv2.drawContours(mask, [largest_areas[-1]], 0, (255,255,255,255), -1)
 
     cv2.imwrite('{}\\5 mask.jpg'.format(data),mask)
     img_bigcontour = cv2.bitwise_and(img1,img1,mask = mask)
@@ -52,14 +55,13 @@ def getAreaOfFood(img1):
     mask_fruit = np.zeros(fruit_bin.shape, np.uint8)
     largest_areas = sorted(contours, key=cv2.contourArea)
 
-    cv2.drawContours(mask_fruit, [largest_areas[-2]], 0, (255,255,255), -1)
+    if result == 2:
+        cv2.drawContours(mask_fruit, [largest_areas[-6]], 0, (255,255,255), -1)
+    else:
+        cv2.drawContours(mask_fruit, [largest_areas[-2]], 0, (255,255,255), -1)
 
     cv2.imwrite('{}\\14 mask_fruit.jpg'.format(data),mask_fruit)
 
-	# #dilate now
-    # kernel2 = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
-    # mask_fruit2 = cv2.dilate(mask_fruit,kernel2,iterations = 1)
-    # cv2.imwrite('{}\\20 mask_fruit2.jpg'.format(data),mask_fruit2)
     fruit_final = cv2.bitwise_and(img1,img1,mask = mask_fruit)
     cv2.imwrite('{}\\15 fruit_final.jpg'.format(data),fruit_final)
     
@@ -70,37 +72,6 @@ def getAreaOfFood(img1):
     largest_areas = sorted(contours, key=cv2.contourArea)
     fruit_contour = largest_areas[-2]
     fruit_area = cv2.contourArea(fruit_contour)
-
-    #*****************************************************************************************
-	
-	# #finding the area of skin. find area of biggest contour
-    # skin2 = skin - mask_fruit2
-    # cv2.imwrite('{}\\23 skin2.jpg'.format(data),skin2)
-	# #erode before finding contours
-    # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
-    # skin_e = cv2.erode(skin2,kernel,iterations = 1)
-    # cv2.imwrite('{}\\24 skin_e .jpg'.format(data),skin_e )
-    # img_th = cv2.adaptiveThreshold(skin_e,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
-    # cv2.imwrite('{}\\25 img_th.jpg'.format(data),img_th)
-    # contours, hierarchy = cv2.findContours(img_th, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    # mask_skin = np.zeros(skin.shape, np.uint8)
-    # largest_areas = sorted(contours, key=cv2.contourArea)
-    # cv2.drawContours(mask_skin, [largest_areas[-2]], 0, (255,255,255), -1)
-    # cv2.imwrite('{}\\26 mask_skin.jpg'.format(data),mask_skin)
-    
-    # skin_rect = cv2.minAreaRect(largest_areas[-2])
-    # box = cv2.boxPoints(skin_rect)
-    # box = np.int0(box)
-    # mask_skin2 = np.zeros(skin.shape, np.uint8)
-    # cv2.drawContours(mask_skin2,[box],0,(255,255,255), -1)
-    # cv2.imwrite('{}\\27 mask_skin2.jpg'.format(data),mask_skin2)
-    
-    # pix_height = max(skin_rect[1])
-    # pix_to_cm_multiplier = 5.0/pix_height
-    # skin_area = cv2.contourArea(box)
-
-    #print(skin_area) #56633.0
-    #print(pix_to_cm_multiplier) #0.02
     
     return fruit_area,fruit_bin ,fruit_final, fruit_contour
 
