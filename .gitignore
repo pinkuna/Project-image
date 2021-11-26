@@ -1,0 +1,17 @@
+FooDD.zip
+FooDD/
+env/
+coin_detector-master/
+test.zip
+__pycache__/
+*.npy
+*.jpg
+*.jpeg
+*.PNG
+*.png
+*.jfif
+model/
+ขยะ/
+log/
+model.zip
+.gitignore/
